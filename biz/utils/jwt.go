@@ -5,13 +5,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-	"github.com/lutasam/GIN_LUTA/biz/common"
-	"github.com/lutasam/GIN_LUTA/biz/model"
+	"github.com/lutasam/check_in_sys/biz/common"
+	"github.com/lutasam/check_in_sys/biz/model"
 )
 
 type JWTStruct struct {
 	UserID         uint64 `json:"user_id"`
-	Account        string `json:"account"`
+	Email          string `json:"email"`
+	Identity       int    `json:"identity"`
 	StandardClaims jwt.StandardClaims
 }
 
@@ -24,8 +25,9 @@ func GenerateJWTByUserInfo(user *model.User) (string, error) {
 	timeNow := time.Now().Unix()
 	token := jwt.New(jwt.SigningMethodHS256)
 	token.Claims = JWTStruct{
-		UserID:  user.ID,
-		Account: user.Username,
+		UserID:   user.ID,
+		Email:    user.Email,
+		Identity: user.Identity,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: timeNow + common.EXPIRETIME,
 			Issuer:    common.ISSUER,

@@ -2,8 +2,8 @@ package utils
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/lutasam/GIN_LUTA/biz/bo"
-	"github.com/lutasam/GIN_LUTA/biz/common"
+	"github.com/lutasam/check_in_sys/biz/bo"
+	"github.com/lutasam/check_in_sys/biz/common"
 )
 
 // Response DIY your Response based on bo.BaseResponse
