@@ -15,7 +15,6 @@ type User struct {
 	TodayRecordStatus     bool           `gorm:"column:today_record_status"`
 	TodayHealthCodeStatus int            `gorm:"column:today_health_code_status"`
 	Identity              int            `gorm:"column:identity"`
-	Records               []Record       `gorm:"foreignKey:user_id"`
 	CreatedAt             time.Time      `gorm:"column:created_at"`
 	UpdatedAt             time.Time      `gorm:"column:updated_at"`
 	DeletedAt             gorm.DeletedAt `gorm:"column:deleted_at"`

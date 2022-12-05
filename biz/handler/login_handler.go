@@ -32,7 +32,7 @@ func (ins *LoginController) Login(c *gin.Context) {
 	}
 	resp, err := service.GetLoginService().Login(c, req)
 	if err != nil {
-		if utils.IsIncludedByErrors(err, common.USERDOESNOTEXIST, common.PASSWORDISERROR, common.USERINPUTERROR, common.UNKNOWNERROR, common.USERNOTACTIVE) {
+		if utils.IsClientError(err) {
 			utils.ResponseClientError(c, err.(common.Error))
 			return
 		} else {
@@ -52,7 +52,7 @@ func (ins *LoginController) ApplyRegister(c *gin.Context) {
 	}
 	resp, err := service.GetLoginService().ApplyRegister(c, req)
 	if err != nil {
-		if utils.IsIncludedByErrors(err, common.USERINPUTERROR, common.USEREXISTED) {
+		if utils.IsClientError(err) {
 			utils.ResponseClientError(c, err.(common.Error))
 			return
 		} else {
@@ -71,7 +71,7 @@ func (ins *LoginController) ActiveUser(c *gin.Context) {
 	}
 	resp, err := service.GetLoginService().ActiveUser(c, req)
 	if err != nil {
-		if utils.IsIncludedByErrors(err, common.USERINPUTERROR, common.USEREXISTED, common.USERDOESNOTEXIST, common.ACTIVECODEERROR) {
+		if utils.IsClientError(err) {
 			utils.ResponseClientError(c, err.(common.Error))
 			return
 		} else {
@@ -91,7 +91,7 @@ func (ins *LoginController) ResetPassword(c *gin.Context) {
 	}
 	resp, err := service.GetLoginService().ResetPassword(c, req)
 	if err != nil {
-		if utils.IsIncludedByErrors(err, common.USERINPUTERROR, common.USEREXISTED) {
+		if utils.IsClientError(err) {
 			utils.ResponseClientError(c, err.(common.Error))
 			return
 		} else {
@@ -110,7 +110,7 @@ func (ins *LoginController) ActiveResetPassword(c *gin.Context) {
 	}
 	resp, err := service.GetLoginService().ActiveResetPassword(c, req)
 	if err != nil {
-		if utils.IsIncludedByErrors(err, common.USERINPUTERROR, common.USEREXISTED, common.USERDOESNOTEXIST, common.ACTIVECODEERROR) {
+		if utils.IsClientError(err) {
 			utils.ResponseClientError(c, err.(common.Error))
 			return
 		} else {
@@ -122,9 +122,39 @@ func (ins *LoginController) ActiveResetPassword(c *gin.Context) {
 }
 
 func (ins *LoginController) ApplyChangeUserEmail(c *gin.Context) {
-
+	req := &bo.ApplyChangeUserEmailRequest{}
+	err := c.ShouldBind(req)
+	if err != nil {
+		utils.ResponseClientError(c, common.USERINPUTERROR)
+	}
+	resp, err := service.GetLoginService().ApplyChangeUserEmail(c, req)
+	if err != nil {
+		if utils.IsClientError(err) {
+			utils.ResponseClientError(c, err.(common.Error))
+			return
+		} else {
+			utils.ResponseServerError(c, err.(common.Error))
+			return
+		}
+	}
+	utils.ResponseSuccess(c, resp)
 }
 
 func (ins *LoginController) ActiveChangeUserEmail(c *gin.Context) {
-
+	req := &bo.ActiveChangeUserEmailRequest{}
+	err := c.ShouldBind(req)
+	if err != nil {
+		utils.ResponseClientError(c, common.USERINPUTERROR)
+	}
+	resp, err := service.GetLoginService().ActiveChangeUserEmail(c, req)
+	if err != nil {
+		if utils.IsClientError(err) {
+			utils.ResponseClientError(c, err.(common.Error))
+			return
+		} else {
+			utils.ResponseServerError(c, err.(common.Error))
+			return
+		}
+	}
+	utils.ResponseSuccess(c, resp)
 }

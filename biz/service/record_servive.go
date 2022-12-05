@@ -25,11 +25,15 @@ func GetRecordService() *RecordService {
 	return recordService
 }
 
-func (ins *RecordService) FindAllUserRecord(c *gin.Context, req *bo.FindUserAllRecordsRequest) (*bo.FindUserAllRecordsResponse, error) {
+func (ins *RecordService) FindUserAllRecords(c *gin.Context, req *bo.FindUserAllRecordsRequest) (*bo.FindUserAllRecordsResponse, error) {
 	if req.CurrentPage < 0 || req.PageSize < 0 || req.PageSize > 100 {
 		return nil, common.USERINPUTERROR
 	}
-	records, err := dal.GetRecordDal().FindRecords(c, req.CurrentPage, req.PageSize)
+	userInfo, err := utils.GetCtxUserInfoJWT(c)
+	if err != nil {
+		return nil, err
+	}
+	records, err := dal.GetRecordDal().FindRecords(c, req.CurrentPage, req.PageSize, userInfo.UserID)
 	if err != nil {
 		return nil, err
 	}

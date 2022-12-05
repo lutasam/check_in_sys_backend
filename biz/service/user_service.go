@@ -30,11 +30,7 @@ func (ins *UserService) UpdateUserInfo(c *gin.Context, req *bo.UpdateUserInfoReq
 	if req.Avatar != "" && !utils.IsValidURL(req.Avatar) {
 		return nil, common.USERINPUTERROR
 	}
-	userInfo, err := utils.GetCtxUserInfoJWT(c)
-	if err != nil {
-		return nil, err
-	}
-	user, err := dal.GetUserDal().TakeUserByEmail(c, userInfo.Email)
+	user, err := dal.GetUserDal().TakeUserByEmail(c, req.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +69,7 @@ func (ins *UserService) FindAllUserStatus(c *gin.Context, req *bo.FindAllUserSta
 		}
 		departmentID = user.DepartmentID
 	}
-	users, err := dal.GetUserDal().FindUsers(c, req.CurrentPage, req.PageSize, req.TodayHealthCodeStatus, req.Name, req.TodayRecordStatus, true, departmentID)
+	users, err := dal.GetUserDal().FindUsers(c, req.CurrentPage, req.PageSize, req.TodayHealthCodeStatus, req.Name, req.TodayRecordStatus, req.NeedRecordStatus, departmentID)
 	if err != nil {
 		return nil, err
 	}
@@ -91,11 +87,17 @@ func (ins *UserService) FindAllUsers(c *gin.Context, req *bo.FindAllUsersRequest
 	if req.CurrentPage < 0 || req.PageSize < 0 || req.PageSize > 100 {
 		return nil, common.USERINPUTERROR
 	}
-	department, err := dal.GetDepartmentDal().TakeDepartmentByName(c, req.Department)
-	if err != nil {
-		return nil, err
+	var departmentID uint64
+	if req.Department == "" { // 超级管理员可查看所有部门
+		departmentID = common.ALLDEPARTMENTS
+	} else { // 部门管理员只能查看自己部门
+		department, err := dal.GetDepartmentDal().TakeDepartmentByName(c, req.Department)
+		if err != nil {
+			return nil, err
+		}
+		departmentID = department.ID
 	}
-	users, err := dal.GetUserDal().FindUsers(c, req.CurrentPage, req.PageSize, common.ALLHEALTHCODE.Ints(), req.Name, false, false, department.ID)
+	users, err := dal.GetUserDal().FindUsers(c, req.CurrentPage, req.PageSize, common.ALLHEALTHCODE.Ints(), req.Name, false, false, departmentID)
 	if err != nil {
 		return nil, err
 	}

@@ -18,6 +18,7 @@ type FindAllUserStatusRequest struct {
 	CurrentPage           int    `json:"current_page" binding:"required"`
 	PageSize              int    `json:"page_size" binding:"required"`
 	Name                  string `json:"name" binding:"-"`
+	NeedRecordStatus      bool   `json:"need_record_status" binding:"-"`
 	TodayRecordStatus     bool   `json:"today_record_status" binding:"-"`
 	TodayHealthCodeStatus int    `json:"today_health_code_status"  binding:"-"`
 }

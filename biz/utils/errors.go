@@ -1,6 +1,9 @@
 package utils
 
-import "errors"
+import (
+	"errors"
+	"github.com/lutasam/check_in_sys/biz/common"
+)
 
 // Used to judge whether an error is in a error set
 func IsIncludedByErrors(err error, errs ...error) bool {
@@ -10,4 +13,8 @@ func IsIncludedByErrors(err error, errs ...error) bool {
 		}
 	}
 	return false
+}
+
+func IsClientError(err error) bool {
+	return err.(common.Error).ErrorType == common.CLIENTERRORCODE
 }

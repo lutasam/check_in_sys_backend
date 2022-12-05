@@ -29,8 +29,13 @@ func (ins *FileController) UploadImage(c *gin.Context) {
 	req.FileHeader = header
 	resp, err := service.GetFileService().UploadImage(c, req)
 	if err != nil {
-		utils.ResponseServerError(c, err.(common.Error))
-		return
+		if utils.IsClientError(err) {
+			utils.ResponseClientError(c, err.(common.Error))
+			return
+		} else {
+			utils.ResponseServerError(c, err.(common.Error))
+			return
+		}
 	}
 	utils.ResponseSuccess(c, resp)
 }

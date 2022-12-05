@@ -10,7 +10,7 @@ const ACTIVECODEEXPTIME = 300 * time.Second             // active code expiratio
 const ACTIVECODESUFFIX = "_active_code"
 const DEFAULTAVATARURL = "http://baidu.com/test.png"
 const MAXIMGSPACE = 1024 * 1024 * 1 // img upload should be less than 1 MB
-const ALLDEPARTMENTS = -1           // symbolize all the departments
+const ALLDEPARTMENTS = 0            // symbolize all the departments
 
 const (
 	STATUSOKCODE    = 200
@@ -28,11 +28,11 @@ const (
 type HealthCodeStatus int
 
 const (
-	GREEN HealthCodeStatus = iota
+	ALLHEALTHCODE HealthCodeStatus = iota
+	GREEN
 	GREY
 	YELLOW
 	RED
-	ALLHEALTHCODE
 )
 
 func (s HealthCodeStatus) Ints() int {
@@ -42,15 +42,15 @@ func (s HealthCodeStatus) Ints() int {
 func ParseHealthCodeStatus(i int) HealthCodeStatus {
 	switch i {
 	case 0:
-		return GREEN
-	case 1:
-		return GREY
-	case 2:
-		return YELLOW
-	case 3:
-		return RED
-	case 4:
 		return ALLHEALTHCODE
+	case 1:
+		return GREEN
+	case 2:
+		return GREY
+	case 3:
+		return YELLOW
+	case 4:
+		return RED
 	default:
 		return GREEN
 	}

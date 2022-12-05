@@ -35,4 +35,12 @@ func InitRouterAndMiddleware(r *gin.Engine) {
 	// 文件模块
 	file := r.Group("/file", middleware.JWTAuth())
 	handler.RegisterFileRouter(file)
+
+	// 部门模块
+	department := r.Group("/department", middleware.JWTAuth())
+	handler.RegisterDepartmentRouter(department)
+
+	// 记录模块
+	record := r.Group("/record", middleware.JWTAuth())
+	handler.RegisterRecordRouter(record)
 }

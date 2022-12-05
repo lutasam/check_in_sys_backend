@@ -1,5 +1,26 @@
-[GIN-debug] GET    /demo/ping                --> github.com/lutasam/check_in_sys/biz/handler.(*DemoController).Ping-fm (3 handlers)
-[GIN-debug] POST   /demo/hello               --> github.com/lutasam/check_in_sys/biz/handler.(*DemoController).Hello-fm (3 handlers)
+[GIN-debug] POST   /login/login              --> github.com/lutasam/check_in_sys/biz/handler.(*LoginController).Login-fm (3 handlers)
+[GIN-debug] POST   /login/apply_register     --> github.com/lutasam/check_in_sys/biz/handler.(*LoginController).ApplyRegister-fm (3 handlers)
+[GIN-debug] POST   /login/active_user        --> github.com/lutasam/check_in_sys/biz/handler.(*LoginController).ActiveUser-fm (3 handlers)
+[GIN-debug] POST   /login/reset_password     --> github.com/lutasam/check_in_sys/biz/handler.(*LoginController).ResetPassword-fm (3 handlers)
+[GIN-debug] POST   /login/active_reset_password --> github.com/lutasam/check_in_sys/biz/handler.(*LoginController).ActiveResetPassword-fm (3 handlers)
+[GIN-debug] POST   /login/apply_change_user_email --> github.com/lutasam/check_in_sys/biz/handler.(*LoginController).ApplyChangeUserEmail-fm (3 handlers)
+[GIN-debug] POST   /login/active_change_user_email --> github.com/lutasam/check_in_sys/biz/handler.(*LoginController).ActiveChangeUserEmail-fm (3 handlers)
+[GIN-debug] POST   /user/update_user_info    --> github.com/lutasam/check_in_sys/biz/handler.(*UserController).UpdateUserInfo-fm (4 handlers)
+[GIN-debug] POST   /user/find_all_user_status --> github.com/lutasam/check_in_sys/biz/handler.(*UserController).FindAllUserStatus-fm (4 handlers)
+[GIN-debug] POST   /user/find_all_users      --> github.com/lutasam/check_in_sys/biz/handler.(*UserController).FindAllUsers-fm (4 handlers)
+[GIN-debug] POST   /user/delete_user         --> github.com/lutasam/check_in_sys/biz/handler.(*UserController).DeleteUser-fm (4 handlers)
+[GIN-debug] POST   /user/add_user            --> github.com/lutasam/check_in_sys/biz/handler.(*UserController).AddUser-fm (4 handlers)
+[GIN-debug] POST   /file/upload_image        --> github.com/lutasam/check_in_sys/biz/handler.(*FileController).UploadImage-fm (4 handlers)
+[GIN-debug] POST   /file/upload_file         --> github.com/lutasam/check_in_sys/biz/handler.(*FileController).UploadFile-fm (4 handlers)
+[GIN-debug] POST   /file/download_file       --> github.com/lutasam/check_in_sys/biz/handler.(*FileController).DownloadFile-fm (4 handlers)
+[GIN-debug] POST   /department/find_all_departments --> github.com/lutasam/check_in_sys/biz/handler.(*DepartmentController).FindAllDepartments-fm (4 handlers)
+[GIN-debug] POST   /department/add_department_permission --> github.com/lutasam/check_in_sys/biz/handler.(*DepartmentController).AddDepartmentPermission-fm (4 handlers)
+[GIN-debug] POST   /department/delete_department_permission --> github.com/lutasam/check_in_sys/biz/handler.(*DepartmentController).DeleteDepartmentPermission-fm (4 handlers)
+[GIN-debug] POST   /record/find_user_all_records --> github.com/lutasam/check_in_sys/biz/handler.(*RecordController).FindUserAllRecords-fm (4 handlers)
+[GIN-debug] POST   /record/upload_user_record --> github.com/lutasam/check_in_sys/biz/handler.(*RecordController).UploadUserRecord-fm (4 handlers)
+[GIN-debug] POST   /record/find_user_today_record --> github.com/lutasam/check_in_sys/biz/handler.(*RecordController).FindUserTodayRecord-fm (4 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8081
+[GIN] 2022/12/05 - 10:26:14 | 200 |     61.9804ms |             ::1 | POST     "/record/find_user_all_records"
+[GIN] 2022/12/05 - 10:26:30 | 200 |     98.0461ms |             ::1 | POST     "/record/find_user_today_record"
