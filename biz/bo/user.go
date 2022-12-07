@@ -7,9 +7,9 @@ type UpdateUserInfoRequest struct {
 	Name                  string `json:"name" binding:"-"`
 	Avatar                string `json:"avatar" binding:"-"`
 	Department            string `json:"department" binding:"-"`
-	TodayRecordStatus     bool   `json:"today_record_status" binding:"-"`
-	TodayHealthCodeStatus int    `json:"today_health_code_status"  binding:"-"`
-	Identity              int    `json:"identity" binding:"-"`
+	TodayRecordStatus     *bool  `json:"today_record_status" binding:"-"`
+	TodayHealthCodeStatus *int   `json:"today_health_code_status"  binding:"-"`
+	Identity              *int   `json:"identity" binding:"-"`
 }
 
 type UpdateUserInfoResponse struct{}
@@ -18,9 +18,9 @@ type FindAllUserStatusRequest struct {
 	CurrentPage           int    `json:"current_page" binding:"required"`
 	PageSize              int    `json:"page_size" binding:"required"`
 	Name                  string `json:"name" binding:"-"`
-	NeedRecordStatus      bool   `json:"need_record_status" binding:"-"`
-	TodayRecordStatus     bool   `json:"today_record_status" binding:"-"`
-	TodayHealthCodeStatus int    `json:"today_health_code_status"  binding:"-"`
+	NeedRecordStatus      *bool  `json:"need_record_status" binding:"-"`
+	TodayRecordStatus     *bool  `json:"today_record_status" binding:"-"`
+	TodayHealthCodeStatus *int   `json:"today_health_code_status"  binding:"-"`
 }
 
 type FindAllUserStatusResponse struct {
@@ -67,3 +67,17 @@ type ActiveChangeUserEmailRequest struct {
 }
 
 type ActiveChangeUserEmailResponse struct{}
+
+type TakeUserInfoRequest struct {
+	UserID string `json:"user_id" binding:"-"`
+}
+
+type TakeUserInfoResponse struct {
+	User *vo.UserVO `json:"user"`
+}
+
+type FindAllAdminsRequest struct{}
+
+type FindAllAdminsResponse struct {
+	Admins []*vo.AdminVO `json:"admins"`
+}

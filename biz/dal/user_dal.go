@@ -5,6 +5,7 @@ import (
 	"github.com/lutasam/check_in_sys/biz/common"
 	"github.com/lutasam/check_in_sys/biz/model"
 	"github.com/lutasam/check_in_sys/biz/repository"
+	"github.com/lutasam/check_in_sys/biz/vo"
 	"sync"
 )
 
@@ -51,8 +52,9 @@ func (ins *UserDal) UpdateUser(c *gin.Context, user *model.User) error {
 	return nil
 }
 
-func (ins *UserDal) FindUsers(c *gin.Context, currentPage, pageSize, healthCodeStatus int, name string, recordStatus, needRecordStatus bool, departmentID uint64) ([]*model.User, error) {
+func (ins *UserDal) FindUsers(c *gin.Context, currentPage, pageSize, healthCodeStatus int, name string, recordStatus, needRecordStatus bool, departmentID uint64) ([]*model.User, int64, error) {
 	var users []*model.User
+	var count int64
 	sql := repository.GetDB().WithContext(c).Table(model.User{}.TableName())
 	if healthCodeStatus != common.ALLHEALTHCODE.Ints() {
 		sql = sql.Where("today_health_code_status = ?", healthCodeStatus)
@@ -66,11 +68,11 @@ func (ins *UserDal) FindUsers(c *gin.Context, currentPage, pageSize, healthCodeS
 	if departmentID != common.ALLDEPARTMENTS {
 		sql = sql.Where("department_id = ?", departmentID)
 	}
-	err := sql.Where("identity != ?", common.SUPER_ADMIN).Limit(pageSize).Offset((currentPage - 1) * pageSize).Find(&users).Error
+	err := sql.Where("identity != ?", common.SUPER_ADMIN).Count(&count).Limit(pageSize).Offset((currentPage - 1) * pageSize).Find(&users).Error
 	if err != nil {
-		return nil, common.DATABASEERROR
+		return nil, 0, common.DATABASEERROR
 	}
-	return users, nil
+	return users, count, nil
 }
 
 func (ins *UserDal) DeleteUser(c *gin.Context, userID uint64) error {
@@ -103,13 +105,63 @@ func (ins *UserDal) TakeSuperAdmin(c *gin.Context) (*model.User, error) {
 	return user, nil
 }
 
-func (ins *UserDal) TakeAllDepartmentAdmins(c *gin.Context, currentPage, pageSize int) ([]*model.User, error) {
+func (ins *UserDal) FindAllDepartmentAdmins(c *gin.Context) ([]*model.User, error) {
 	var users []*model.User
 	err := repository.GetDB().WithContext(c).Table(model.User{}.TableName()).
-		Where("identity == ?", common.DEPARTMENT_ADMIN.Ints()).
-		Limit(pageSize).Offset((currentPage - 1) * pageSize).Find(&users).Error
+		Where("identity = ?", common.DEPARTMENT_ADMIN.Ints()).
+		Find(&users).Error
 	if err != nil {
 		return nil, common.DATABASEERROR
 	}
 	return users, nil
+}
+
+func (ins *UserDal) FindAllUsersInDepartmentGroup(c *gin.Context, departmentIDs []uint64) ([]*model.User, error) {
+	var users []*model.User
+	sql := repository.GetDB().WithContext(c).Table(model.User{}.TableName())
+	if len(departmentIDs) > 0 && departmentIDs[0] != common.ALLDEPARTMENTS {
+		sql = sql.Where("department_id in ?", departmentIDs)
+	}
+	err := sql.Where("identity = ?", common.USER.Ints()).Find(&users).Error
+	if err != nil {
+		return nil, common.DATABASEERROR
+	}
+	return users, nil
+}
+
+type SummaryResult struct {
+	HealthCode int
+	PeopleNum  int
+}
+
+// SummaryHealthCodeStatusInSpecificUserGroup summary and analyze user's health code status in specific group
+func (ins *UserDal) SummaryHealthCodeStatusInSpecificUserGroup(c *gin.Context, userIDs []uint64) (int, int, []*vo.HealthCodePartVO, error) {
+	var recordNum int64
+	err := repository.GetDB().WithContext(c).Table(model.User{}.TableName()).
+		Where("id in ? and today_record_status = ?", userIDs, true).Count(&recordNum).Error
+	if err != nil {
+		return 0, 0, nil, common.DATABASEERROR
+	}
+
+	var parts []*SummaryResult
+	err = repository.GetDB().WithContext(c).Table(model.User{}.TableName()).
+		Select("today_health_code_status as health_code, count(*) as people_num").Group("health_code").
+		Where("id in ?", userIDs).Scan(&parts).Error
+	if err != nil {
+		return 0, 0, nil, common.DATABASEERROR
+	}
+
+	abnormalNum := 0
+	var healthCodeParts []*vo.HealthCodePartVO
+	for _, part := range parts {
+		if part.HealthCode != common.GREEN.Ints() {
+			abnormalNum += part.PeopleNum
+		}
+		healthCodeParts = append(healthCodeParts, &vo.HealthCodePartVO{
+			HealthCode: common.ParseHealthCodeStatus(part.HealthCode).String(),
+			PeopleNum:  part.PeopleNum,
+		})
+	}
+
+	return int(recordNum), abnormalNum, healthCodeParts, nil
 }

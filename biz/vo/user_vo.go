@@ -10,13 +10,16 @@ type UserStatusVO struct {
 }
 
 type UserVO struct {
-	ID         string `json:"id"`
-	Email      string `json:"email"`
-	Name       string `json:"name"`
-	Department string `json:"department"`
-	Identity   string `json:"identity"`
-	CreatedAt  string `json:"created_at"`
-	UpdatedAt  string `json:"updated_at"`
+	ID                    string `json:"id"`
+	Email                 string `json:"email"`
+	Name                  string `json:"name"`
+	Department            string `json:"department"`
+	Identity              string `json:"identity"`
+	Avatar                string `json:"avatar"`
+	TodayRecordStatus     bool   `json:"today_record_status"`
+	TodayHealthCodeStatus int    `json:"today_health_code_status"`
+	CreatedAt             string `json:"created_at"`
+	UpdatedAt             string `json:"updated_at"`
 }
 
 type UserRecordVO struct {
@@ -28,4 +31,9 @@ type UserRecordVO struct {
 	HealthCodeStatus string `json:"health_code_status"`
 	Remark           string `json:"remark"`
 	Appendix         string `json:"appendix"`
+}
+
+type AdminVO struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }

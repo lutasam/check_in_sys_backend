@@ -23,101 +23,106 @@ var (
 	UNKNOWNERROR = Error{
 		ErrorCode:   -1,
 		ErrorType:   SERVERERRORCODE,
-		ErrorString: "unknown error. maybe server is error. please wait for sometime",
+		ErrorString: "未知服务器错误，请联系管理员并等待",
 	}
 	USERINPUTERROR = Error{
 		ErrorCode:   100001,
 		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "please check your input, there is something wrong",
+		ErrorString: "输入错误，请检查您的输入",
 	}
 	HAVENOPERMISSION = Error{
 		ErrorCode:   100002,
 		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "you have no access to this operation",
+		ErrorString: "无权限，请联系管理员获取",
 	}
 	DATABASEERROR = Error{
 		ErrorCode:   100003,
 		ErrorType:   SERVERERRORCODE,
-		ErrorString: "server's database has some error, please try again later",
+		ErrorString: "服务器数据库错误，请联系管理员并等待",
 	}
 	USERDOESNOTEXIST = Error{
 		ErrorCode:   100004,
 		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "user does not exist. please check",
+		ErrorString: "用户不存在，请检查",
 	}
 	PASSWORDISERROR = Error{
 		ErrorCode:   100005,
 		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "password is incorrect. please try again",
+		ErrorString: "密码错误，请再尝试一边",
 	}
 	USERNOTLOGIN = Error{
 		ErrorCode:   100006,
 		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "you do not login. please login",
+		ErrorString: "未登录，请重新登录",
 	}
 	EXCEEDTIMELIMIT = Error{
 		ErrorCode:   100007,
 		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "your token has no time. please login again",
+		ErrorString: "Token过期，请重新登录",
 	}
 	USEREXISTED = Error{
 		ErrorCode:   100008,
 		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "account has existed. please rename your account",
+		ErrorString: "用户邮箱已存在，请尝试登录或换一个邮箱",
 	}
-	GROUPNOTEXIST = Error{
+	NONEEDNOTICE = Error{
 		ErrorCode:   100009,
 		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "this group dose not exist. maybe your input is error",
+		ErrorString: "该用户已经打卡，无需提醒",
 	}
-	GROUPEXIST = Error{
+	EMAILSYSTEMERROR = Error{
 		ErrorCode:   100010,
-		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "this group has already been created. please use another name",
+		ErrorType:   SERVERERRORCODE,
+		ErrorString: "邮件服务器异常，请联系管理员",
 	}
 	DATANOTFOUND = Error{
 		ErrorCode:   100011,
 		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "data is not in database. please check your input",
+		ErrorString: "数据未找到，请检查您的输入",
 	}
-	HAVEBEENFRIEND = Error{
-		ErrorCode:   100012,
-		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "you both are already friends, no need to be friend again",
-	}
-	NOTFRIEND = Error{
-		ErrorCode:   100013,
-		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "you both are not friend, no need to delete friend",
-	}
+	//HAVEBEENFRIEND = Error{
+	//	ErrorCode:   100012,
+	//	ErrorType:   CLIENTERRORCODE,
+	//	ErrorString: "you both are already friends, no need to be friend again",
+	//}
+	//NOTFRIEND = Error{
+	//	ErrorCode:   100013,
+	//	ErrorType:   CLIENTERRORCODE,
+	//	ErrorString: "you both are not friend, no need to delete friend",
+	//}
 	REDISERROR = Error{
 		ErrorCode:   100014,
 		ErrorType:   SERVERERRORCODE,
-		ErrorString: "server redis db error, please try later",
+		ErrorString: "Redis服务出现故障，请通知管理员",
 	}
-	USERNOTACTIVE = Error{
-		ErrorCode:   100015,
-		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "you do not active your email, please active your account to do something next",
-	}
+	//USERNOTACTIVE = Error{
+	//	ErrorCode:   100015,
+	//	ErrorType:   CLIENTERRORCODE,
+	//	ErrorString: "you do not active your email, please active your account to do something next",
+	//}
 	ACTIVECODEERROR = Error{
 		ErrorCode:   100016,
 		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "active code is not correct, please check",
+		ErrorString: "验证码错误，请检查",
 	}
 	IMGFORMATERROR = Error{
 		ErrorCode:   100017,
 		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "we only support jpg/jpeg/png image, please upload correct image",
+		ErrorString: "我们只支持jpg/jpeg/png图片，请上传正确格式的图片",
 	}
 	IMGTOOLARGEERROR = Error{
 		ErrorCode:   100018,
 		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "this image is too big, please upload less smaller image",
+		ErrorString: "图片大于指定大小，请尝试减小图片大小后上传",
 	}
 	FILEUPLOADERROR = Error{
 		ErrorCode:   100019,
 		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "file upload fail, maybe it's server error, please wait",
+		ErrorString: "文件上传失败，请上传正确格式的文件",
+	}
+	CANNOTDELETEADMIN = Error{
+		ErrorCode:   100020,
+		ErrorType:   CLIENTERRORCODE,
+		ErrorString: "不能删除管理员，请先将管理员的权限让出并降级成普通用户",
 	}
 )

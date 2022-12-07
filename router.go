@@ -43,4 +43,8 @@ func InitRouterAndMiddleware(r *gin.Engine) {
 	// 记录模块
 	record := r.Group("/record", middleware.JWTAuth())
 	handler.RegisterRecordRouter(record)
+
+	// 统计模块
+	statistic := r.Group("/statistic", middleware.JWTAuth())
+	handler.RegisterStatisticRouter(statistic)
 }

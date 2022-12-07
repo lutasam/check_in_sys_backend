@@ -40,20 +40,21 @@ func (ins *DepartmentDal) TakeDepartmentByID(c *gin.Context, id uint64) (*model.
 	if err != nil {
 		return nil, common.DATABASEERROR
 	}
-	if department.ID == 0 {
+	if department.Name == "" {
 		return nil, common.DATANOTFOUND
 	}
 	return department, nil
 }
 
-func (ins *DepartmentDal) FindDepartments(c *gin.Context, currentPage, pageSize int) ([]*model.Department, error) {
+func (ins *DepartmentDal) FindDepartments(c *gin.Context, currentPage, pageSize int) ([]*model.Department, int64, error) {
 	var departments []*model.Department
-	err := repository.GetDB().WithContext(c).Table(model.Department{}.TableName()).Preload("Admin").
+	var count int64
+	err := repository.GetDB().WithContext(c).Table(model.Department{}.TableName()).Where("id != ?", common.ALLDEPARTMENTS).Count(&count).Preload("Admin").
 		Limit(pageSize).Offset((currentPage - 1) * pageSize).Find(&departments).Error
 	if err != nil {
-		return nil, common.DATABASEERROR
+		return nil, 0, common.DATABASEERROR
 	}
-	return departments, nil
+	return departments, count, nil
 }
 
 func (ins *DepartmentDal) UpdateDepartment(c *gin.Context, department *model.Department) error {
@@ -62,4 +63,13 @@ func (ins *DepartmentDal) UpdateDepartment(c *gin.Context, department *model.Dep
 		return common.DATABASEERROR
 	}
 	return nil
+}
+
+func (ins *DepartmentDal) FindAllDepartmentsByAdminID(c *gin.Context, adminID uint64) ([]*model.Department, error) {
+	var departments []*model.Department
+	err := repository.GetDB().WithContext(c).Table(model.Department{}.TableName()).Where("admin_id = ?", adminID).Preload("Admin").Find(&departments).Error
+	if err != nil {
+		return nil, common.DATABASEERROR
+	}
+	return departments, nil
 }

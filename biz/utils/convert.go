@@ -37,3 +37,7 @@ func StringToInt(s string) (int, error) {
 func TimeToString(t time.Time) string {
 	return t.Format("2006-01-02 15:04:05")
 }
+
+func TimeToDateString(t time.Time) string {
+	return t.Format("2006-01-02")
+}

@@ -10,6 +10,8 @@
 [GIN-debug] POST   /user/find_all_users      --> github.com/lutasam/check_in_sys/biz/handler.(*UserController).FindAllUsers-fm (4 handlers)
 [GIN-debug] POST   /user/delete_user         --> github.com/lutasam/check_in_sys/biz/handler.(*UserController).DeleteUser-fm (4 handlers)
 [GIN-debug] POST   /user/add_user            --> github.com/lutasam/check_in_sys/biz/handler.(*UserController).AddUser-fm (4 handlers)
+[GIN-debug] POST   /user/take_user_info      --> github.com/lutasam/check_in_sys/biz/handler.(*UserController).TakeUserInfo-fm (4 handlers)
+[GIN-debug] POST   /user/find_all_admins     --> github.com/lutasam/check_in_sys/biz/handler.(*UserController).FindAllAdmins-fm (4 handlers)
 [GIN-debug] POST   /file/upload_image        --> github.com/lutasam/check_in_sys/biz/handler.(*FileController).UploadImage-fm (4 handlers)
 [GIN-debug] POST   /file/upload_file         --> github.com/lutasam/check_in_sys/biz/handler.(*FileController).UploadFile-fm (4 handlers)
 [GIN-debug] POST   /file/download_file       --> github.com/lutasam/check_in_sys/biz/handler.(*FileController).DownloadFile-fm (4 handlers)
@@ -19,8 +21,11 @@
 [GIN-debug] POST   /record/find_user_all_records --> github.com/lutasam/check_in_sys/biz/handler.(*RecordController).FindUserAllRecords-fm (4 handlers)
 [GIN-debug] POST   /record/upload_user_record --> github.com/lutasam/check_in_sys/biz/handler.(*RecordController).UploadUserRecord-fm (4 handlers)
 [GIN-debug] POST   /record/find_user_today_record --> github.com/lutasam/check_in_sys/biz/handler.(*RecordController).FindUserTodayRecord-fm (4 handlers)
+[GIN-debug] POST   /record/notice_user_finish_record --> github.com/lutasam/check_in_sys/biz/handler.(*RecordController).NoticeUserFinishRecord-fm (4 handlers)
+[GIN-debug] POST   /record/notice_all_user_not_finish_record --> github.com/lutasam/check_in_sys/biz/handler.(*RecordController).NoticeAllUserNotFinishRecord-fm (4 handlers)
+[GIN-debug] POST   /statistic/take_user_statistic --> github.com/lutasam/check_in_sys/biz/handler.(*StatisticController).TakeUserStatistic-fm (4 handlers)
+[GIN-debug] POST   /statistic/take_admin_statistic --> github.com/lutasam/check_in_sys/biz/handler.(*StatisticController).TakeAdminStatistic-fm (4 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8081
-[GIN] 2022/12/05 - 10:26:14 | 200 |     61.9804ms |             ::1 | POST     "/record/find_user_all_records"
-[GIN] 2022/12/05 - 10:26:30 | 200 |     98.0461ms |             ::1 | POST     "/record/find_user_today_record"
+[GIN] 2022/12/07 - 11:17:52 | 200 |    196.3366ms |             ::1 | POST     "/statistic/take_admin_statistic"

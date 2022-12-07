@@ -16,6 +16,8 @@ func RegisterRecordRouter(r *gin.RouterGroup) {
 		r.POST("/find_user_all_records", recordController.FindUserAllRecords)
 		r.POST("/upload_user_record", recordController.UploadUserRecord)
 		r.POST("/find_user_today_record", recordController.FindUserTodayRecord)
+		r.POST("/notice_user_finish_record", recordController.NoticeUserFinishRecord)
+		r.POST("/notice_all_user_not_finish_record", recordController.NoticeAllUserNotFinishRecord)
 	}
 }
 
@@ -67,6 +69,46 @@ func (ins *RecordController) FindUserTodayRecord(c *gin.Context) {
 		return
 	}
 	resp, err := service.GetRecordService().FindUserTodayRecord(c, req)
+	if err != nil {
+		if utils.IsClientError(err) {
+			utils.ResponseClientError(c, err.(common.Error))
+			return
+		} else {
+			utils.ResponseServerError(c, err.(common.Error))
+			return
+		}
+	}
+	utils.ResponseSuccess(c, resp)
+}
+
+func (ins *RecordController) NoticeUserFinishRecord(c *gin.Context) {
+	req := &bo.NoticeUserFinishRecordRequest{}
+	err := c.ShouldBind(req)
+	if err != nil {
+		utils.ResponseClientError(c, common.USERINPUTERROR)
+		return
+	}
+	resp, err := service.GetRecordService().NoticeUserFinishRecord(c, req)
+	if err != nil {
+		if utils.IsClientError(err) {
+			utils.ResponseClientError(c, err.(common.Error))
+			return
+		} else {
+			utils.ResponseServerError(c, err.(common.Error))
+			return
+		}
+	}
+	utils.ResponseSuccess(c, resp)
+}
+
+func (ins *RecordController) NoticeAllUserNotFinishRecord(c *gin.Context) {
+	req := &bo.NoticeAllUserNotFinishRecordRequest{}
+	err := c.ShouldBind(req)
+	if err != nil {
+		utils.ResponseClientError(c, common.USERINPUTERROR)
+		return
+	}
+	resp, err := service.GetRecordService().NoticeAllUserNotFinishRecord(c, req)
 	if err != nil {
 		if utils.IsClientError(err) {
 			utils.ResponseClientError(c, err.(common.Error))

@@ -41,9 +41,9 @@ func (ins *UserService) UpdateUserInfo(c *gin.Context, req *bo.UpdateUserInfoReq
 	user.Name = req.Name
 	user.Avatar = req.Avatar
 	user.DepartmentID = department.ID
-	user.TodayRecordStatus = req.TodayRecordStatus
-	user.TodayHealthCodeStatus = req.TodayHealthCodeStatus
-	user.Identity = req.Identity
+	user.TodayRecordStatus = *req.TodayRecordStatus
+	user.TodayHealthCodeStatus = *req.TodayHealthCodeStatus
+	user.Identity = *req.Identity
 	err = dal.GetUserDal().UpdateUser(c, user)
 	if err != nil {
 		return nil, err
@@ -69,7 +69,18 @@ func (ins *UserService) FindAllUserStatus(c *gin.Context, req *bo.FindAllUserSta
 		}
 		departmentID = user.DepartmentID
 	}
-	users, err := dal.GetUserDal().FindUsers(c, req.CurrentPage, req.PageSize, req.TodayHealthCodeStatus, req.Name, req.TodayRecordStatus, req.NeedRecordStatus, departmentID)
+	var todayHealthCodeStatus int
+	var todayRecordStatus, needRecordStatus bool
+	if req.TodayHealthCodeStatus == nil {
+		todayHealthCodeStatus = common.ALLHEALTHCODE.Ints()
+	}
+	if req.TodayRecordStatus == nil {
+		todayRecordStatus = false
+	}
+	if req.NeedRecordStatus == nil {
+		needRecordStatus = false
+	}
+	users, total, err := dal.GetUserDal().FindUsers(c, req.CurrentPage, req.PageSize, todayHealthCodeStatus, req.Name, todayRecordStatus, needRecordStatus, departmentID)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +89,7 @@ func (ins *UserService) FindAllUserStatus(c *gin.Context, req *bo.FindAllUserSta
 		return nil, err
 	}
 	return &bo.FindAllUserStatusResponse{
-		Total:        len(users),
+		Total:        int(total),
 		UserStatuses: userStatuses,
 	}, nil
 }
@@ -97,7 +108,7 @@ func (ins *UserService) FindAllUsers(c *gin.Context, req *bo.FindAllUsersRequest
 		}
 		departmentID = department.ID
 	}
-	users, err := dal.GetUserDal().FindUsers(c, req.CurrentPage, req.PageSize, common.ALLHEALTHCODE.Ints(), req.Name, false, false, departmentID)
+	users, total, err := dal.GetUserDal().FindUsers(c, req.CurrentPage, req.PageSize, common.ALLHEALTHCODE.Ints(), req.Name, false, false, departmentID)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +117,7 @@ func (ins *UserService) FindAllUsers(c *gin.Context, req *bo.FindAllUsersRequest
 		return nil, err
 	}
 	return &bo.FindAllUsersResponse{
-		Total: len(users),
+		Total: int(total),
 		Users: userVOs,
 	}, nil
 }
@@ -116,7 +127,29 @@ func (ins *UserService) DeleteUser(c *gin.Context, req *bo.DeleteUserRequest) (*
 	if err != nil {
 		return nil, err
 	}
-	err = dal.GetUserDal().DeleteUser(c, id)
+	user, err := dal.GetUserDal().TakeUserByID(c, id)
+	if err != nil {
+		return nil, err
+	}
+	if user.DepartmentID == uint64(common.DEPARTMENT_ADMIN.Ints()) || user.DepartmentID == uint64(common.SUPER_ADMIN.Ints()) {
+		return nil, common.CANNOTDELETEADMIN
+	}
+	wg := sync.WaitGroup{}
+	wg.Add(2)
+	go func() {
+		err1 := dal.GetUserDal().DeleteUser(c, id)
+		if err1 != nil {
+			err = err1
+		}
+	}()
+	go func() {
+		err1 := dal.GetRecordDal().DeleteUserAllRecords(c, id)
+		if err1 != nil {
+			err = err1
+		}
+	}()
+	wg.Wait()
+
 	if err != nil {
 		return nil, err
 	}
@@ -160,6 +193,55 @@ func (ins *UserService) AddUser(c *gin.Context, req *bo.AddUserRequest) (*bo.Add
 	return &bo.AddUserResponse{}, nil
 }
 
+func (ins *UserService) TakeUserInfo(c *gin.Context, req *bo.TakeUserInfoRequest) (*bo.TakeUserInfoResponse, error) {
+	var userID uint64
+	if req.UserID == "" {
+		userInfo, err := utils.GetCtxUserInfoJWT(c)
+		if err != nil {
+			return nil, err
+		}
+		userID = userInfo.UserID
+	} else {
+		id, err := utils.StringToUint64(req.UserID)
+		if err != nil {
+			return nil, err
+		}
+		userID = id
+	}
+	user, err := dal.GetUserDal().TakeUserByID(c, userID)
+	if err != nil {
+		return nil, err
+	}
+	department, err := dal.GetDepartmentDal().TakeDepartmentByID(c, user.DepartmentID)
+	if err != nil {
+		return nil, err
+	}
+	return &bo.TakeUserInfoResponse{
+		User: &vo.UserVO{
+			ID:                    utils.Uint64ToString(user.ID),
+			Email:                 user.Email,
+			Name:                  user.Name,
+			Department:            department.Name,
+			Identity:              common.ParseIdentity(user.Identity).String(),
+			Avatar:                user.Avatar,
+			TodayRecordStatus:     user.TodayRecordStatus,
+			TodayHealthCodeStatus: common.ParseHealthCodeStatus(user.TodayHealthCodeStatus).Ints(),
+			CreatedAt:             utils.TimeToString(user.CreatedAt),
+			UpdatedAt:             utils.TimeToString(user.UpdatedAt),
+		},
+	}, nil
+}
+
+func (ins *UserService) FindAllAdmins(c *gin.Context, req *bo.FindAllAdminsRequest) (*bo.FindAllAdminsResponse, error) {
+	admins, err := dal.GetUserDal().FindAllDepartmentAdmins(c)
+	if err != nil {
+		return nil, err
+	}
+	return &bo.FindAllAdminsResponse{
+		Admins: convertToAdminVOs(admins),
+	}, nil
+}
+
 func convertToUserStatusVOs(c *gin.Context, users []*model.User) ([]*vo.UserStatusVO, error) {
 	var vos []*vo.UserStatusVO
 	for _, user := range users {
@@ -192,9 +274,21 @@ func convertToUserVOs(c *gin.Context, users []*model.User) ([]*vo.UserVO, error)
 			Name:       user.Name,
 			Department: department.Name,
 			Identity:   common.ParseIdentity(user.Identity).String(),
+			Avatar:     user.Avatar,
 			CreatedAt:  utils.TimeToString(user.CreatedAt),
 			UpdatedAt:  utils.TimeToString(user.UpdatedAt),
 		})
 	}
 	return vos, nil
+}
+
+func convertToAdminVOs(admins []*model.User) []*vo.AdminVO {
+	var vos []*vo.AdminVO
+	for _, admin := range admins {
+		vos = append(vos, &vo.AdminVO{
+			ID:   utils.Uint64ToString(admin.ID),
+			Name: admin.Name,
+		})
+	}
+	return vos
 }

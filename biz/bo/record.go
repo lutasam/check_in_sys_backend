@@ -4,9 +4,9 @@ import "github.com/lutasam/check_in_sys/biz/vo"
 
 type UploadUserRecordRequest struct {
 	Address          string `json:"address" binding:"required"`
-	TemperatureRange int    `json:"temperature_range" binding:"required"`
-	IsHealthy        bool   `json:"is_healthy" binding:"required"`
-	HealthCodeStatus int    `json:"health_code_status" binding:"required"`
+	TemperatureRange *int   `json:"temperature_range" binding:"required"`
+	IsHealthy        *bool  `json:"is_healthy" binding:"required"`
+	HealthCodeStatus *int   `json:"health_code_status" binding:"required"`
 	Remark           string `json:"remark" binding:"-"`
 	Appendix         string `json:"appendix" binding:"-"`
 }
@@ -30,3 +30,13 @@ type FindUserTodayRecordRequest struct {
 type FindUserTodayRecordResponse struct {
 	UserRecord *vo.UserRecordVO `json:"user_record"`
 }
+
+type NoticeUserFinishRecordRequest struct {
+	UserID string `json:"user_id"`
+}
+
+type NoticeUserFinishRecordResponse struct{}
+
+type NoticeAllUserNotFinishRecordRequest struct{}
+
+type NoticeAllUserNotFinishRecordResponse struct{}

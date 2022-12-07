@@ -36,12 +36,12 @@ func (ins *DepartmentService) FindAllDepartments(c *gin.Context, req *bo.FindAll
 	if userInfo.Identity != common.SUPER_ADMIN.Ints() {
 		return nil, common.HAVENOPERMISSION
 	}
-	departments, err := dal.GetDepartmentDal().FindDepartments(c, req.CurrentPage, req.PageSize)
+	departments, total, err := dal.GetDepartmentDal().FindDepartments(c, req.CurrentPage, req.PageSize)
 	if err != nil {
 		return nil, err
 	}
 	return &bo.FindAllDepartmentsResponse{
-		Total:       len(departments),
+		Total:       int(total),
 		Departments: convertToDepartmentVOs(departments),
 	}, nil
 }

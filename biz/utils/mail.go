@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"github.com/lutasam/check_in_sys/biz/common"
 	"gopkg.in/gomail.v2"
 )
 
@@ -12,5 +13,8 @@ func SendMail(mailTo, subject, body string) error {
 	m.SetBody("text/html", body)
 	d := gomail.NewDialer(GetConfigString("mail.host"), 25, GetConfigString("mail.username"), GetConfigString("mail.auth"))
 	err := d.DialAndSend(m)
-	return err
+	if err != nil {
+		return common.EMAILSYSTEMERROR
+	}
+	return nil
 }
