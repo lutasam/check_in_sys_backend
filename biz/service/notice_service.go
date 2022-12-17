@@ -73,7 +73,7 @@ func (ins *NoticeService) DeleteNotice(c *gin.Context, req *bo.DeleteNoticeReque
 	if notice.UserID != userInfo.UserID {
 		return nil, common.HAVENOPERMISSION
 	}
-	err = dal.GetNoticeDal().DeleteNotice(c, id)
+	err = dal.GetNoticeDal().DeleteNotice(c, notice)
 	if err != nil {
 		return nil, err
 	}

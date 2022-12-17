@@ -48,7 +48,7 @@ var (
 	PASSWORDISERROR = Error{
 		ErrorCode:   100005,
 		ErrorType:   CLIENTERRORCODE,
-		ErrorString: "密码错误，请再尝试一边",
+		ErrorString: "密码错误，请再尝试一遍",
 	}
 	USERNOTLOGIN = Error{
 		ErrorCode:   100006,
@@ -80,11 +80,11 @@ var (
 		ErrorType:   CLIENTERRORCODE,
 		ErrorString: "数据未找到，请检查您的输入",
 	}
-	//HAVEBEENFRIEND = Error{
-	//	ErrorCode:   100012,
-	//	ErrorType:   CLIENTERRORCODE,
-	//	ErrorString: "you both are already friends, no need to be friend again",
-	//}
+	FILENOTEXIST = Error{
+		ErrorCode:   100012,
+		ErrorType:   CLIENTERRORCODE,
+		ErrorString: "该文件不存在，请检查您的输入",
+	}
 	//NOTFRIEND = Error{
 	//	ErrorCode:   100013,
 	//	ErrorType:   CLIENTERRORCODE,

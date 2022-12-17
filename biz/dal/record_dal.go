@@ -25,7 +25,7 @@ func GetRecordDal() *RecordDal {
 func (ins *RecordDal) FindRecords(c *gin.Context, currentPage, pageSize int, userID uint64) ([]*model.Record, int64, error) {
 	var records []*model.Record
 	var count int64
-	err := repository.GetDB().WithContext(c).Table(model.Record{}.TableName()).Where("user_id = ?", userID).Count(&count).
+	err := repository.GetDB().WithContext(c).Table(model.Record{}.TableName()).Where("user_id = ? and deleted_at is null", userID).Count(&count).
 		Limit(pageSize).Offset((currentPage - 1) * pageSize).Find(&records).Error
 	if err != nil {
 		return nil, 0, common.DATABASEERROR
@@ -35,7 +35,7 @@ func (ins *RecordDal) FindRecords(c *gin.Context, currentPage, pageSize int, use
 
 func (ins *RecordDal) CountUserRecords(c *gin.Context, userID uint64) (int64, error) {
 	var count int64
-	err := repository.GetDB().WithContext(c).Table(model.Record{}.TableName()).Where("user_id = ?", userID).Count(&count).Error
+	err := repository.GetDB().WithContext(c).Table(model.Record{}.TableName()).Where("user_id = ? and deleted_at is null", userID).Count(&count).Error
 	if err != nil {
 		return 0, common.DATABASEERROR
 	}
@@ -60,9 +60,9 @@ func (ins *RecordDal) TakeRecentUserRecord(c *gin.Context, userID uint64) (*mode
 	return record, nil
 }
 
-func (ins *RecordDal) DeleteUserAllRecords(c *gin.Context, userID uint64) error {
+func (ins *RecordDal) DeleteUserAllRecords(c *gin.Context, user *model.User) error {
 	err := repository.GetDB().WithContext(c).Table(model.Record{}.TableName()).
-		Where("user_id = ?", userID).Delete(&model.Record{}).Error
+		Where("user_id = ?", user.ID).Delete(&model.Record{}).Error
 	if err != nil {
 		return common.DATABASEERROR
 	}

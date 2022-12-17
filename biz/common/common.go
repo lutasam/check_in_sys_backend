@@ -6,9 +6,9 @@ const ISSUER = "LUTASAM"                                // jwt issuer
 const PASSWORDSALT = "astaxie12798akljzmknm.ahkjkljl;k" // use only for password encryption
 const OTHERSECRETSALT = "9871267812345mn812345xyz"      // user for other encryption
 const EXPIRETIME = 86400000                             // jwt expiration time. 1 day's second
+const REDISEXPIRETIME = 24 * 3600 * time.Second         // redis normal key expire time, refers to one day
 const ACTIVECODEEXPTIME = 300 * time.Second             // active code expiration time. 5 min
-const ACTIVECODESUFFIX = "_active_code"
-const DEFAULTAVATARURL = "http://baidu.com/test.png"
+const DEFAULTAVATARURL = "http://img.duoziwang.com/2018/20/08111043560274.jpg"
 const MAXIMGSPACE = 1024 * 1024 * 1 // img upload should be less than 1 MB
 const ALLDEPARTMENTS = 0            // symbolize all the departments
 
@@ -22,6 +22,17 @@ const (
 	STATUSOKMSG    = "OK"
 	CLIENTERRORMSG = "400 CLIENT ERROR"
 	SERVERERRORMSG = "500 SERVER ERROR"
+)
+
+const (
+	ACTIVECODESUFFIX     = "_active_code"
+	USERINFOEMAILSUFFIX  = "_user_info_email"
+	USERINFOIDSUFFIX     = "_user_info_id"
+	USERNOTICEKEY        = "user_notices"
+	NOTICEIDSUFFIX       = "_notice_id"
+	DEPARTMENTNAMESUFFIX = "_department_info_name"
+	DEPARTMENTIDSUFFIX   = "_department_info_id"
+	DEPARTMENTSKEY       = "departments"
 )
 
 // health code status

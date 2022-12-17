@@ -3,7 +3,7 @@ package dal
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"github.com/lutasam/check_in_sys/biz/common"
 	"github.com/lutasam/check_in_sys/biz/repository"
 	"sync"
@@ -24,7 +24,7 @@ func GetActiveDal() *ActiveDal {
 }
 
 func (ins *ActiveDal) SetActiveCode(c *gin.Context, email, code string) error {
-	_, err := repository.GetRedis().WithContext(c).Set(email+common.ACTIVECODESUFFIX, code, common.ACTIVECODEEXPTIME).Result()
+	_, err := repository.GetRedis().WithContext(c).Set(c, email+common.ACTIVECODESUFFIX, code, common.ACTIVECODEEXPTIME).Result()
 	if err != nil {
 		return common.REDISERROR
 	}
@@ -32,7 +32,7 @@ func (ins *ActiveDal) SetActiveCode(c *gin.Context, email, code string) error {
 }
 
 func (ins *ActiveDal) GetActiveCodeIfExist(c *gin.Context, email string) (string, error) {
-	result, err := repository.GetRedis().WithContext(c).Get(email + common.ACTIVECODESUFFIX).Result()
+	result, err := repository.GetRedis().WithContext(c).Get(c, email+common.ACTIVECODESUFFIX).Result()
 	if err != nil && errors.Is(err, redis.Nil) {
 		return "", common.USERINPUTERROR
 	}

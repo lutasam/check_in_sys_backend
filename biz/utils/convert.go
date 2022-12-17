@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"github.com/lutasam/check_in_sys/biz/common"
 	"strconv"
 	"time"
@@ -40,4 +41,17 @@ func TimeToString(t time.Time) string {
 
 func TimeToDateString(t time.Time) string {
 	return t.Format("2006-01-02")
+}
+
+func StructToMap(s interface{}) (map[string]interface{}, error) {
+	result, err := json.Marshal(s)
+	if err != nil {
+		return nil, common.UNKNOWNERROR
+	}
+	var m map[string]interface{}
+	err = json.Unmarshal(result, &m)
+	if err != nil {
+		return nil, common.UNKNOWNERROR
+	}
+	return m, nil
 }

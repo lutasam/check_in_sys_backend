@@ -20,6 +20,7 @@ func init() {
 		utils.GetConfigString("mysql.dbname"),
 		utils.GetConfigString("mysql.config"))), &gorm.Config{
 		PrepareStmt: true,
+		//Logger:      logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
 		panic(err)

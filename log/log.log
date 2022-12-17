@@ -3,8 +3,8 @@
 [GIN-debug] POST   /login/active_user        --> github.com/lutasam/check_in_sys/biz/handler.(*LoginController).ActiveUser-fm (3 handlers)
 [GIN-debug] POST   /login/reset_password     --> github.com/lutasam/check_in_sys/biz/handler.(*LoginController).ResetPassword-fm (3 handlers)
 [GIN-debug] POST   /login/active_reset_password --> github.com/lutasam/check_in_sys/biz/handler.(*LoginController).ActiveResetPassword-fm (3 handlers)
-[GIN-debug] POST   /login/apply_change_user_email --> github.com/lutasam/check_in_sys/biz/handler.(*LoginController).ApplyChangeUserEmail-fm (3 handlers)
-[GIN-debug] POST   /login/active_change_user_email --> github.com/lutasam/check_in_sys/biz/handler.(*LoginController).ActiveChangeUserEmail-fm (3 handlers)
+[GIN-debug] POST   /login/apply_change_user_email --> github.com/lutasam/check_in_sys/biz/handler.(*LoginController).ApplyChangeUserEmail-fm (4 handlers)
+[GIN-debug] POST   /login/active_change_user_email --> github.com/lutasam/check_in_sys/biz/handler.(*LoginController).ActiveChangeUserEmail-fm (4 handlers)
 [GIN-debug] POST   /user/update_user_info    --> github.com/lutasam/check_in_sys/biz/handler.(*UserController).UpdateUserInfo-fm (4 handlers)
 [GIN-debug] POST   /user/find_all_user_status --> github.com/lutasam/check_in_sys/biz/handler.(*UserController).FindAllUserStatus-fm (4 handlers)
 [GIN-debug] POST   /user/find_all_users      --> github.com/lutasam/check_in_sys/biz/handler.(*UserController).FindAllUsers-fm (4 handlers)
@@ -25,7 +25,9 @@
 [GIN-debug] POST   /record/notice_all_user_not_finish_record --> github.com/lutasam/check_in_sys/biz/handler.(*RecordController).NoticeAllUserNotFinishRecord-fm (4 handlers)
 [GIN-debug] POST   /statistic/take_user_statistic --> github.com/lutasam/check_in_sys/biz/handler.(*StatisticController).TakeUserStatistic-fm (4 handlers)
 [GIN-debug] POST   /statistic/take_admin_statistic --> github.com/lutasam/check_in_sys/biz/handler.(*StatisticController).TakeAdminStatistic-fm (4 handlers)
+[GIN-debug] POST   /notice/find_all_notices  --> github.com/lutasam/check_in_sys/biz/handler.(*NoticeController).FindAllNotices-fm (4 handlers)
+[GIN-debug] POST   /notice/upload_notice     --> github.com/lutasam/check_in_sys/biz/handler.(*NoticeController).UploadNotice-fm (4 handlers)
+[GIN-debug] POST   /notice/delete_notice     --> github.com/lutasam/check_in_sys/biz/handler.(*NoticeController).DeleteNotice-fm (4 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
 [GIN-debug] Listening and serving HTTP on :8081
-[GIN] 2022/12/07 - 11:17:52 | 200 |    196.3366ms |             ::1 | POST     "/statistic/take_admin_statistic"

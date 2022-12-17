@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lutasam/check_in_sys/biz/bo"
 	"github.com/lutasam/check_in_sys/biz/common"
+	"github.com/lutasam/check_in_sys/biz/middleware"
 	"github.com/lutasam/check_in_sys/biz/service"
 	"github.com/lutasam/check_in_sys/biz/utils"
 )
@@ -18,8 +19,8 @@ func RegisterLoginRouter(r *gin.RouterGroup) {
 		r.POST("/active_user", loginController.ActiveUser)
 		r.POST("/reset_password", loginController.ResetPassword)
 		r.POST("/active_reset_password", loginController.ActiveResetPassword)
-		r.POST("/apply_change_user_email", loginController.ApplyChangeUserEmail)
-		r.POST("/active_change_user_email", loginController.ActiveChangeUserEmail)
+		r.POST("/apply_change_user_email", middleware.JWTAuth(), loginController.ApplyChangeUserEmail)
+		r.POST("/active_change_user_email", middleware.JWTAuth(), loginController.ActiveChangeUserEmail)
 	}
 }
 

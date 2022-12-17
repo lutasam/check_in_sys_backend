@@ -3,6 +3,7 @@ package utils
 import (
 	"github.com/lutasam/check_in_sys/biz/common"
 	"mime/multipart"
+	"os"
 	"strings"
 )
 
@@ -15,4 +16,9 @@ func IsCorrectImg(header *multipart.FileHeader) (bool, error) {
 		return false, common.IMGTOOLARGEERROR
 	}
 	return true, nil
+}
+
+func IsFileExist(filepath string) bool {
+	_, err := os.Lstat(filepath)
+	return !os.IsNotExist(err)
 }

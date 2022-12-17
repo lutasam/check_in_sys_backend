@@ -29,13 +29,6 @@ func (ins *DepartmentService) FindAllDepartments(c *gin.Context, req *bo.FindAll
 	if req.CurrentPage < 0 || req.PageSize < 0 || req.PageSize > 100 {
 		return nil, common.USERINPUTERROR
 	}
-	userInfo, err := utils.GetCtxUserInfoJWT(c)
-	if err != nil {
-		return nil, err
-	}
-	if userInfo.Identity != common.SUPER_ADMIN.Ints() {
-		return nil, common.HAVENOPERMISSION
-	}
 	departments, total, err := dal.GetDepartmentDal().FindDepartments(c, req.CurrentPage, req.PageSize)
 	if err != nil {
 		return nil, err

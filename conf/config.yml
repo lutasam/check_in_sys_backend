@@ -24,6 +24,13 @@ mail:
   auth: c521392a5189032a
 file:
   imgs:
-    address: imgs/
-    url: D:/Code/program/Go/src/gin_admin_sys/imgs/
-    # linux: http://124.70.201.39/imgs/
+    address: /share/public/imgs/
+    # linux: /share/public/imgs/
+    # Windows: imgs/
+    url: http://124.70.201.39:8080/imgs/
+    # linux: http://124.70.201.39:8080/imgs/
+    # Windows: D:/Code/program/Go/src/gin_admin_sys/imgs/
+  files:
+    address: /share/public/files/
+    # linux: /share/public/files/
+    # Windows: files/

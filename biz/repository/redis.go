@@ -1,7 +1,8 @@
 package repository
 
 import (
-	"github.com/go-redis/redis"
+	"context"
+	"github.com/go-redis/redis/v8"
 	"github.com/lutasam/check_in_sys/biz/utils"
 )
 
@@ -12,7 +13,7 @@ func init() {
 		Addr:     utils.GetConfigString("redis.address"),
 		Password: utils.GetConfigString("redis.password"),
 	})
-	_, err := redisDB.Ping().Result()
+	_, err := redisDB.Ping(context.Background()).Result()
 	if err != nil {
 		panic(err)
 	}

@@ -202,7 +202,7 @@ func sendActiveUserEmail(c *gin.Context, email string) error {
 	if err != nil {
 		return err
 	}
-	subject := "[验证激活码]某某后台管理系统"
+	subject := "[验证激活码]健康打卡管理系统"
 	body := `
 验证码：%s。5分钟之内有效。<br>
 如果不是您本人操作，请忽视该邮件。

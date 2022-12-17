@@ -1,3 +1,5 @@
 /conf/
 /log/
 *.yml
+/imgs/
+/files/

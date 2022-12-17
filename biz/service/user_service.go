@@ -41,9 +41,15 @@ func (ins *UserService) UpdateUserInfo(c *gin.Context, req *bo.UpdateUserInfoReq
 	user.Name = req.Name
 	user.Avatar = req.Avatar
 	user.DepartmentID = department.ID
-	user.TodayRecordStatus = *req.TodayRecordStatus
-	user.TodayHealthCodeStatus = *req.TodayHealthCodeStatus
-	user.Identity = *req.Identity
+	if req.TodayRecordStatus != nil {
+		user.TodayRecordStatus = *req.TodayRecordStatus
+	}
+	if req.TodayHealthCodeStatus != nil {
+		user.TodayHealthCodeStatus = *req.TodayHealthCodeStatus
+	}
+	if req.Identity != nil {
+		user.Identity = *req.Identity
+	}
 	err = dal.GetUserDal().UpdateUser(c, user)
 	if err != nil {
 		return nil, err
@@ -73,12 +79,18 @@ func (ins *UserService) FindAllUserStatus(c *gin.Context, req *bo.FindAllUserSta
 	var todayRecordStatus, needRecordStatus bool
 	if req.TodayHealthCodeStatus == nil {
 		todayHealthCodeStatus = common.ALLHEALTHCODE.Ints()
+	} else {
+		todayHealthCodeStatus = *req.TodayHealthCodeStatus
 	}
 	if req.TodayRecordStatus == nil {
 		todayRecordStatus = false
+	} else {
+		todayRecordStatus = *req.TodayRecordStatus
 	}
 	if req.NeedRecordStatus == nil {
 		needRecordStatus = false
+	} else {
+		needRecordStatus = *req.NeedRecordStatus
 	}
 	users, total, err := dal.GetUserDal().FindUsers(c, req.CurrentPage, req.PageSize, todayHealthCodeStatus, req.Name, todayRecordStatus, needRecordStatus, departmentID)
 	if err != nil {
@@ -137,13 +149,13 @@ func (ins *UserService) DeleteUser(c *gin.Context, req *bo.DeleteUserRequest) (*
 	wg := sync.WaitGroup{}
 	wg.Add(2)
 	go func() {
-		err1 := dal.GetUserDal().DeleteUser(c, id)
+		err1 := dal.GetUserDal().DeleteUser(c, user)
 		if err1 != nil {
 			err = err1
 		}
 	}()
 	go func() {
-		err1 := dal.GetRecordDal().DeleteUserAllRecords(c, id)
+		err1 := dal.GetRecordDal().DeleteUserAllRecords(c, user)
 		if err1 != nil {
 			err = err1
 		}
