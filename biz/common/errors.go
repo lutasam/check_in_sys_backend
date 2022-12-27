@@ -85,11 +85,11 @@ var (
 		ErrorType:   CLIENTERRORCODE,
 		ErrorString: "该文件不存在，请检查您的输入",
 	}
-	//NOTFRIEND = Error{
-	//	ErrorCode:   100013,
-	//	ErrorType:   CLIENTERRORCODE,
-	//	ErrorString: "you both are not friend, no need to delete friend",
-	//}
+	NOTINDEPARTMENT = Error{
+		ErrorCode:   100013,
+		ErrorType:   CLIENTERRORCODE,
+		ErrorString: "该用户不属于该部门，请先将该用户分配到对应的部门",
+	}
 	REDISERROR = Error{
 		ErrorCode:   100014,
 		ErrorType:   SERVERERRORCODE,

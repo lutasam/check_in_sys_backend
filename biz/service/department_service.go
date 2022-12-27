@@ -49,6 +49,9 @@ func (ins *DepartmentService) AddDepartmentPermission(c *gin.Context, req *bo.Ad
 	if err != nil {
 		return nil, err
 	}
+	if user.DepartmentID != departmentID {
+		return nil, common.NOTINDEPARTMENT
+	}
 	department, err := dal.GetDepartmentDal().TakeDepartmentByID(c, departmentID)
 	if err != nil {
 		return nil, err
